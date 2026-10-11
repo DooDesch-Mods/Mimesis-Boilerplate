@@ -5,7 +5,7 @@
 
 > A starter template for building MelonLoader mods for MIMESIS. Clone it, rename it, and you have a ready-to-build mod skeleton that matches the project conventions.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.1-blue)
 ![Game](https://img.shields.io/badge/game-MIMESIS-purple)
 ![MelonLoader](https://img.shields.io/badge/MelonLoader-0.7.3%2B-green)
 ![Status](https://img.shields.io/badge/status-template-lightgrey)
@@ -14,9 +14,9 @@ This is a developer template, not a player-facing feature mod. Installing it doe
 
 ## Features
 
-- Minimal `MelonMod` entry point that initializes preferences and runs `HarmonyInstance.PatchAll()` - no game behavior is patched.
+- Minimal `MelonMod` entry point that initializes preferences - no game behavior is patched.
 - MelonPreferences config scaffold demonstrating the standard preferences pattern.
-- A fully commented-out Harmony patch stub showing the Prefix/Postfix pattern (not compiled by default).
+- A Harmony patch stub showing the Prefix/Postfix pattern, with the patch body commented out.
 - A one-command setup script that renames the project to your mod name and removes the template Git history.
 - A GitHub Actions workflow that builds on a version tag and publishes to GitHub Releases and Thunderstore.
 - Optional MimicAPI integration pre-wired but disabled - uncomment to enable.
@@ -25,7 +25,7 @@ This is a developer template, not a player-facing feature mod. Installing it doe
 
 | Component | Version |
 |---|---|
-| MIMESIS | 0.3.0 (current Steam build) |
+| MIMESIS | 0.3.2 |
 | MelonLoader | 0.7.3+ |
 
 ## Installation
@@ -47,7 +47,7 @@ There is no in-game usage and no keybinds. This is a developer template - it pro
 
 For the full setup guide (rename script, build steps, GitHub Actions, and optional MimicAPI), see the repository:
 
-<https://github.com/DooDesch/Mimesis-Boilerplate>
+<https://github.com/DooDesch-Mods/Mimesis-Boilerplate>
 
 ## Credits / License
 
@@ -55,4 +55,6 @@ Author: DooDesch. Licensed under the MIT License.
 
 ## AI disclosure
 
-The mod icon is AI-generated. Code and configuration are hand-written.
+The mod icon is AI-generated.
+
+Built against MIMESIS 0.3.2 / MelonLoader 0.7.3.

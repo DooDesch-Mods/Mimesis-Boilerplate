@@ -1,7 +1,7 @@
 {
   "name": "Boilerplate",
   "version_number": "0.0.0",
-  "website_url": "https://github.com/DooDesch/Mimesis-Boilerplate",
+  "website_url": "https://github.com/DooDesch-Mods/Mimesis-Boilerplate",
   "description": "A boilerplate template for Mimesis mods. Replace this with your mod description.",
   "dependencies": [
     "LavaGang-MelonLoader-0.7.3"
@@ -10,4 +10,3 @@
     "DooDesch"
   ]
 }
-
