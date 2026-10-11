@@ -5,7 +5,7 @@
 
 > A starter template for MelonLoader mods for MIMESIS. Clone it, run the rename script, and you have a ready-to-build mod skeleton that already matches the project conventions.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.1-blue)
 ![Game](https://img.shields.io/badge/game-MIMESIS-purple)
 ![MelonLoader](https://img.shields.io/badge/MelonLoader-0.7.3%2B-green)
 ![Status](https://img.shields.io/badge/status-template-lightgrey)
@@ -14,24 +14,22 @@ This is a developer template, not a player-facing feature mod. Installing it doe
 
 ## Features
 
-- **Minimal MelonMod entry point** (`Core.cs`): on `OnInitializeMelon` it initializes preferences, calls `HarmonyInstance.PatchAll()`, and logs `Boilerplate initialized. Enabled={value}`. No game behavior is patched.
+- **Minimal MelonMod entry point** (`Core.cs`): on `OnInitializeMelon` it initializes preferences and logs `Boilerplate initialized. Enabled={value}`. No game behavior is patched.
 - **MelonPreferences config scaffold** (`Config/BoilerplatePreferences.cs`): an idempotent `Initialize()` plus a typed `CreateEntry<T>` helper that demonstrates the standard preferences pattern.
-- **Harmony patch stub** (`Patches/ExamplePatch.cs`): a fully commented-out example of the `[HarmonyPatch(typeof(Class), "Method")]` + Prefix/Postfix pattern. It is not compiled (its `<Compile Include>` line is commented out in the `.csproj`).
+- **Harmony patch stub** (`Patches/ExamplePatch.cs`): an example of the `[HarmonyPatch(typeof(Class), "Method")]` + Prefix/Postfix pattern with the patch body commented out.
 - **One-command setup script** (`setup_mod.sh`, POSIX sh): prompts for a PascalCase mod name, renames the `.csproj`, replaces every `Boilerplate` occurrence across `.cs`/`.csproj`/`.md`/`.json`/`.yml`/`.gitignore`, renames the preferences file, and deletes `.git` so you do not push back to the template.
-- **GitHub Actions release workflow** (`.github/workflows/build-and-release.yml`): on a `v*` tag it checks out a private Workspace repo, verifies the tag matches the csproj `<Version>`, builds Release, publishes a GitHub Release with the DLL, and uploads the package to Thunderstore.
-- **PostBuild auto-copy**: the built DLL is copied to the configured `ModsDirectory`; commented-out helpers exist for copying `MimicAPI.dll` and auto-launching the game after a build.
-- **Optional MimicAPI integration pre-wired but disabled**: a commented `MelonOptionalDependencies("MimicAPI")` in `Core.cs` and a commented `ProjectReference` (`Private=false`) plus `MimicAPIPath` in the `.csproj`. Uncomment to enable.
+- **GitHub Actions release workflow** (`.github/workflows/build-and-release.yml`): on a `v*` tag it checks out a private Workspace repo, validates the version tag and injects its version into the Release build, publishes a GitHub Release with the DLL, and uploads the package to Thunderstore.
+- **PostBuild auto-copy**: the built DLL is copied to the configured `ModsDirectory`; the shared deploy configuration defaults to `_Test/MIMESIS/Mods`.
+- **Optional MimicAPI integration pre-wired but disabled**: a commented `MelonOptionalDependencies("MimicAPI")` in `Core.cs` and commented imports for the shared `MimicAPI.props` in the `.csproj`. Uncomment the imports to enable.
 
 ## Requirements
 
 | Component | Version |
 |---|---|
-| MIMESIS | 0.3.0 (current Steam build) |
+| MIMESIS | 0.3.2 |
 | MelonLoader | 0.7.3+ |
 | .NET SDK | for building (target framework `netstandard2.1`) |
 | Workspace/lib | game DLLs (`lib/game`) + `MelonLoader.dll` / `0Harmony.dll` (`lib/melonloader`) |
-
-> The published `thunderstore/manifest.json` still declares `LavaGang-MelonLoader-0.7.1`. The supported runtime target is MelonLoader 0.7.3+.
 
 ## Configuration
 
@@ -49,16 +47,16 @@ There is no in-game usage and no keybinds - this is a developer template. Workfl
 2. Run `./setup_mod.sh` and enter a PascalCase mod name. The script renames the `.csproj`, replaces all `Boilerplate` strings, renames the Config preferences file, and removes `.git`.
 3. Optionally rename the folder to match.
 4. Re-init Git (`git init && git add . && git commit -m "Initial commit"`).
-5. Edit the new `.csproj`: set `ModsDirectory` and `GameExePath` to your install, and confirm `WorkspaceLibPath` points at your `Workspace/lib` (default `$(MSBuildThisFileDirectory)../Workspace/lib`).
-6. Build with `dotnet build -c Release` in the mod folder. PostBuild copies the DLL into `MIMESIS/Mods`.
+5. Confirm the shared Workspace imports and `WorkspaceLibPath` point at your Workspace checkout (local default: `$(MSBuildThisFileDirectory)../Workspace/lib`).
+6. Build with `dotnet build -c Release` in the mod folder. The shared deploy configuration copies the DLL into `_Test/MIMESIS/Mods`.
 
-To use the patch example, uncomment `Patches/ExamplePatch.cs` and add its `<Compile Include>` line in the `.csproj`.
+To use the patch example, uncomment the patch body in `Patches/ExamplePatch.cs` and replace its example game class and method with your targets. The SDK includes the file automatically.
 
-To use MimicAPI, uncomment the `MelonOptionalDependencies` attribute in `Core.cs` and the `ProjectReference` in the `.csproj`, then build the Workspace `MimicAPI` project.
+To use MimicAPI, uncomment the `MelonOptionalDependencies` attribute in `Core.cs` and the `MimicAPI.props` imports in the `.csproj`, then build the Workspace `MimicAPI` project.
 
 ## Compatibility
 
-Built for Mimesis 0.3.0 / MelonLoader 0.7.3.
+Built for Mimesis 0.3.2 / MelonLoader 0.7.3.
 
 ## Building (developers)
 
@@ -66,14 +64,14 @@ Built for Mimesis 0.3.0 / MelonLoader 0.7.3.
 dotnet build -c Release
 ```
 
-References resolve through `Workspace/lib/game` (game DLLs) and `Workspace/lib/melonloader` (`MelonLoader.dll`, `0Harmony.dll`). The PostBuild target copies the built DLL into `MIMESIS/Mods`. The GitHub Actions workflow pins the build SDK to 8.0.x; the local environment uses a newer SDK.
+References resolve through `Workspace/lib/game` (game DLLs) and `Workspace/lib/melonloader` (`MelonLoader.dll`, `0Harmony.dll`). The shared deploy configuration copies the built DLL into `_Test/MIMESIS/Mods`. The GitHub Actions workflow pins the build SDK to 8.0.x; the local environment uses a newer SDK.
 
 ## Credits / License
 
 Author: DooDesch. Licensed under the MIT License (see `LICENSE.md`).
 
-Repository: <https://github.com/DooDesch/Mimesis-Boilerplate>
+Repository: <https://github.com/DooDesch-Mods/Mimesis-Boilerplate>
 
 ## AI disclosure
 
-The mod icon is AI-generated. Code and configuration are hand-written.
+The mod icon is AI-generated.
