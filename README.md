@@ -5,10 +5,12 @@
 
 > A starter template for MelonLoader mods for MIMESIS. Clone it, run the rename script, and you have a ready-to-build mod skeleton that already matches the project conventions.
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue)
+![Version](https://img.shields.io/badge/version-1.1.2-blue)
 ![Game](https://img.shields.io/badge/game-MIMESIS-purple)
 ![MelonLoader](https://img.shields.io/badge/MelonLoader-0.7.3%2B-green)
 ![Status](https://img.shields.io/badge/status-template-lightgrey)
+
+![Boilerplate in MIMESIS](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/header.jpg)
 
 This is a developer template, not a player-facing feature mod. Installing it does nothing in game - it just logs that it initialized. Use it as the starting point for a new Mimesis mod.
 
@@ -22,11 +24,19 @@ This is a developer template, not a player-facing feature mod. Installing it doe
 - **PostBuild auto-copy**: the built DLL is copied to the configured `ModsDirectory`; the shared deploy configuration defaults to `_Test/MIMESIS/Mods`.
 - **Optional MimicAPI integration pre-wired but disabled**: a commented `MelonOptionalDependencies("MimicAPI")` in `Core.cs` and commented imports for the shared `MimicAPI.props` in the `.csproj`. Uncomment the imports to enable.
 
+## Screenshots
+
+Game context only. This project has no standalone gameplay feature.
+
+![Native MIMESIS scenery used as developer-template context](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/game-context.jpg)
+
+Game context only. Boilerplate is a developer template without a player-facing gameplay feature.
+
 ## Requirements
 
 | Component | Version |
 |---|---|
-| MIMESIS | 0.3.2 |
+| MIMESIS | 0.4.0 |
 | MelonLoader | 0.7.3+ |
 | .NET SDK | for building (target framework `netstandard2.1`) |
 | Workspace/lib | game DLLs (`lib/game`) + `MelonLoader.dll` / `0Harmony.dll` (`lib/melonloader`) |
@@ -56,7 +66,7 @@ To use MimicAPI, uncomment the `MelonOptionalDependencies` attribute in `Core.cs
 
 ## Compatibility
 
-Built for Mimesis 0.3.2 / MelonLoader 0.7.3.
+Built for Mimesis 0.4.0 / MelonLoader 0.7.3.
 
 ## Building (developers)
 
@@ -72,6 +82,6 @@ Author: DooDesch. Licensed under the MIT License (see `LICENSE.md`).
 
 Repository: <https://github.com/DooDesch-Mods/Mimesis-Boilerplate>
 
-## AI disclosure
+## Images
 
-The mod icon is AI-generated.
+Gallery images are captured in MIMESIS; release artwork uses real game photos.
