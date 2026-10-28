@@ -5,10 +5,12 @@
 
 > A starter template for building MelonLoader mods for MIMESIS. Clone it, rename it, and you have a ready-to-build mod skeleton that matches the project conventions.
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue)
+![Version](https://img.shields.io/badge/version-1.1.2-blue)
 ![Game](https://img.shields.io/badge/game-MIMESIS-purple)
 ![MelonLoader](https://img.shields.io/badge/MelonLoader-0.7.3%2B-green)
 ![Status](https://img.shields.io/badge/status-template-lightgrey)
+
+![Boilerplate in MIMESIS](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/header.jpg)
 
 This is a developer template, not a player-facing feature mod. Installing it does nothing in game - it only logs that it initialized. If you are a player, there is nothing to configure here. If you are a modder, use it as the starting point for a new Mimesis mod.
 
@@ -21,11 +23,19 @@ This is a developer template, not a player-facing feature mod. Installing it doe
 - A GitHub Actions workflow that builds on a version tag and publishes to GitHub Releases and Thunderstore.
 - Optional MimicAPI integration pre-wired but disabled - uncomment to enable.
 
+## Screenshots
+
+Game context only. This project has no standalone gameplay feature.
+
+![Native MIMESIS scenery used as developer-template context](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/game-context.jpg)
+
+Game context only. Boilerplate is a developer template without a player-facing gameplay feature.
+
 ## Requirements
 
 | Component | Version |
 |---|---|
-| MIMESIS | 0.3.2 |
+| MIMESIS | 0.4.0 |
 | MelonLoader | 0.7.3+ |
 
 ## Installation
@@ -53,8 +63,8 @@ For the full setup guide (rename script, build steps, GitHub Actions, and option
 
 Author: DooDesch. Licensed under the MIT License.
 
-## AI disclosure
+## Images
 
-The mod icon is AI-generated.
+Gallery images are captured in MIMESIS; release artwork uses real game photos.
 
-Built against MIMESIS 0.3.2 / MelonLoader 0.7.3.
+Built against MIMESIS 0.4.0 / MelonLoader 0.7.3.
