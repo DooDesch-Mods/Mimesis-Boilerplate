@@ -23,7 +23,10 @@ permissions:
   contents: write
 
 jobs:
+  template:
+    uses: ./.github/workflows/template.yml
   release:
+    needs: template
     uses: DooDesch-Mods/.github/.github/workflows/mimesis-release.yml@main
     with:
       project: Boilerplate.csproj
@@ -41,3 +44,18 @@ jobs:
       THUNDERSTORE_TOKEN: ${{ secrets.THUNDERSTORE_TOKEN }}
       NEXUSMODS_API_KEY: ${{ secrets.NEXUSMODS_API_KEY }}
       DISCORD_RELEASE_WEBHOOK: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
+  source:
+    needs: release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Package developer sources
+        run: python tools/package_source.py "dist/Boilerplate_${GITHUB_REF_NAME#v}_source.zip"
+      - name: Add source kit to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/*_source.zip

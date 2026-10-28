@@ -4,4 +4,6 @@ obj
 release
 *.zip
 thunderstore-package
+__pycache__/
+dist/
 

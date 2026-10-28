@@ -1,0 +1,44 @@
+name: Template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Download official MelonLoader references
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v0.7.3 -R LavaGang/MelonLoader -p MelonLoader.x64.zip -D loader
+          python -m zipfile -e loader/MelonLoader.x64.zip loader
+      - name: Test generator and compile independent mod
+        shell: bash
+        run: python tools/test_setup.py --loader loader/MelonLoader/net35 --output ../GeneratedCanary
+      - name: Package the source kit
+        run: python tools/package_source.py dist/Boilerplate-source.zip
+      - name: Generate from the packaged kit
+        shell: bash
+        run: |
+          python -m zipfile -e dist/Boilerplate-source.zip ../source-kit
+          python ../source-kit/Boilerplate/setup_mod.py KitCanary ../KitCanary --author DooDesch
+          dotnet build ../KitCanary/KitCanary.csproj -c Release -p:MelonLoaderPath="$GITHUB_WORKSPACE/loader/MelonLoader/net35"

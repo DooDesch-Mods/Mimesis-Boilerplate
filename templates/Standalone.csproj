@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>Boilerplate</AssemblyName>
+    <RootNamespace>Boilerplate</RootNamespace>
+    <Version Condition="'$(Version)' == ''">0.1.0</Version>
+    <Authors>__AUTHOR_XML__</Authors>
+    <Deterministic>true</Deterministic>
+    <MelonLoaderPath Condition="'$(MelonLoaderPath)' == '' and '$(GamePath)' != ''">$(GamePath)/MelonLoader/net35</MelonLoaderPath>
+    <GameManagedPath Condition="'$(GameManagedPath)' == '' and '$(GamePath)' != ''">$(GamePath)/MIMESIS_Data/Managed</GameManagedPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MelonLoader" HintPath="$(MelonLoaderPath)/MelonLoader.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(MelonLoaderPath)/0Harmony.dll" Private="false" />
+    <!-- Add only the game assemblies your patches use. Never distribute these DLLs. -->
+    <Reference Include="Assembly-CSharp" HintPath="$(GameManagedPath)/Assembly-CSharp.dll" Private="false" Condition="Exists('$(GameManagedPath)/Assembly-CSharp.dll')" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(GameManagedPath)/UnityEngine.CoreModule.dll" Private="false" Condition="Exists('$(GameManagedPath)/UnityEngine.CoreModule.dll')" />
+  </ItemGroup>
+  <Target Name="CheckLoaderReferences" BeforeTargets="ResolveAssemblyReferences">
+    <Error Code="MODREF001" Condition="!Exists('$(MelonLoaderPath)/MelonLoader.dll') or !Exists('$(MelonLoaderPath)/0Harmony.dll')" Text="Set GamePath to your MIMESIS installation with MelonLoader 0.7.3, or set MelonLoaderPath to the folder containing MelonLoader.dll and 0Harmony.dll." />
+  </Target>
+  <Target Name="GenerateModVersion" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <ModVersionFile>$(IntermediateOutputPath)ModVersion.g.cs</ModVersionFile>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(ModVersionFile)" Lines="namespace Boilerplate.Build { internal static class ModVersion { internal const string Current = &quot;$(Version)&quot;%3B } }" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(ModVersionFile)" />
+      <FileWrites Include="$(ModVersionFile)" />
+    </ItemGroup>
+  </Target>
+</Project>
