@@ -2,69 +2,60 @@
 
 > 🛟 **Need help or found a bug?** Get support at [support.doodesch.de/boilerplate](https://support.doodesch.de/boilerplate).
 
-
-> A starter template for building MelonLoader mods for MIMESIS. Clone it, rename it, and you have a ready-to-build mod skeleton that matches the project conventions.
-
-![Version](https://img.shields.io/badge/version-1.1.2-blue)
-![Game](https://img.shields.io/badge/game-MIMESIS-purple)
-![MelonLoader](https://img.shields.io/badge/MelonLoader-0.7.3%2B-green)
-![Status](https://img.shields.io/badge/status-template-lightgrey)
+A small developer template for MIMESIS 0.4.0 and MelonLoader 0.7.3. Generate a mod with your own name and author, then build it without a private Workspace or access token.
 
 ![Boilerplate in MIMESIS](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/header.jpg)
 
-This is a developer template, not a player-facing feature mod. Installing it does nothing in game - it only logs that it initialized. If you are a player, there is nothing to configure here. If you are a modder, use it as the starting point for a new Mimesis mod.
+## Start a mod
 
-## Features
+Download the **source kit** from the release files, or clone this repository. Store packages include it under `Source/Boilerplate/`. Python 3.10+ and .NET SDK 8+ are required.
 
-- Minimal `MelonMod` entry point that initializes preferences - no game behavior is patched.
-- MelonPreferences config scaffold demonstrating the standard preferences pattern.
-- A Harmony patch stub showing the Prefix/Postfix pattern, with the patch body commented out.
-- A one-command setup script that renames the project to your mod name and removes the template Git history.
-- A GitHub Actions workflow that builds on a version tag and publishes to GitHub Releases and Thunderstore.
-- Optional MimicAPI integration pre-wired but disabled - uncomment to enable.
+```sh
+python setup_mod.py MyMod ../MyMod --author "Your name"
+dotnet build ../MyMod/MyMod.csproj -c Release -p:GamePath="/path/to/MIMESIS"
+```
 
-## Screenshots
+Install MelonLoader 0.7.3 in your MIMESIS installation first. On Windows, use `python` or `py -3`; the optional `setup_mod.sh` wrapper uses `python3`.
 
-Game context only. This project has no standalone gameplay feature.
+The destination must be new and outside the template folder. Setup never overwrites existing files, edits the template or deletes Git history. It copies an explicit source allowlist and creates a separate project without our private build imports, workflows, images or release identity. It includes its own public GitHub build workflow using official MelonLoader references.
+
+The generated DLL is in `bin/Release/netstandard2.1/`. Copy only your mod DLL to `MIMESIS/Mods/`. Building the generated project does not deploy or launch the game. Alternatively supply `MelonLoaderPath` (the folder with MelonLoader.dll and 0Harmony.dll) and `GameManagedPath` (`MIMESIS_Data/Managed`) instead of `GamePath`.
+
+## Included patterns
+
+- A minimal `MelonMod` entry point with the correct MIMESIS game identity.
+- Typed, nullable-aware, idempotent MelonPreferences initialization before patches run.
+- An inactive Harmony example. Replace the target with a method from the current game build and guard your changes with `Enabled`.
+- One build version: `-p:Version=1.0.0` reaches both assembly metadata and `MelonInfo`.
+- `Private=false` references so loader and game assemblies stay out of your build output.
+- Deterministic builds, explicit reference errors and no automatic game installation changes.
+
+MelonLoader applies assembly Harmony patches automatically. Do not call `PatchAll()` again. Scene objects do not exist during mod initialization; resolve them after their scene is ready. Gameplay changes in a multiplayer mod need explicit host authority and settings synchronization. The template does not provide network synchronization or a MimicAPI dependency; add only what your mod needs.
+
+The generated README includes a support link. Set your own support URL, project metadata, license and release workflow before publishing your mod. The template itself is MIT licensed; retain its license notice when distributing its source.
+
+## Repeatable checks
+
+```sh
+python tools/test_setup.py
+python tools/test_setup.py --loader "/path/to/MelonLoader/net35" --output ../CanaryMod
+python tools/package_source.py dist/Boilerplate-source.zip
+```
+
+Checks cover renaming, author escaping, invalid identifiers, source-directory guards and preservation of an existing Git marker. The optional build generates a fresh mod and checks that only its own DLL is emitted. CI runs these checks and builds from the source ZIP on Windows and Linux with the official MelonLoader 0.7.3 references. Game DLLs and private Workspace files are not redistributed.
+
+## Template demonstration
+
+The optional `Boilerplate.dll` only logs initialization and creates `[Boilerplate] Enabled = true` in `UserData/MelonPreferences.cfg`. It does not change gameplay. Installing this demonstration DLL is not needed to develop your own mod.
 
 ![Native MIMESIS scenery used as developer-template context](https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/docs/img/game-context.jpg)
 
-Game context only. Boilerplate is a developer template without a player-facing gameplay feature.
+All images use real MIMESIS captures. This is game context, not a gameplay feature of the template.
 
-## Requirements
+## Build this repository
 
-| Component | Version |
-|---|---|
-| MIMESIS | 0.4.0 |
-| MelonLoader | 0.7.3+ |
+Our own demonstration release uses the shared DooDesch Workspace and standard MIMESIS release CI. That infrastructure is not copied into generated mods. To build independently, use the generator above.
 
-## Installation
+Version: **1.2.0**. Author: DooDesch. [MIT License](https://github.com/DooDesch-Mods/Mimesis-Boilerplate/blob/main/LICENSE.md).
 
-- Recommended: install via a Thunderstore mod manager (r2modman or Gale).
-- Manual: download the package, extract `Boilerplate.dll` into `MIMESIS/Mods/`, and launch once to generate the config.
-
-## Configuration
-
-Stored in `UserData/MelonPreferences.cfg` under the `Boilerplate` category.
-
-| Option | Description | Default | Values/Range |
-|---|---|---|---|
-| `Enabled` | Enable Boilerplate functionality. When disabled, the mod will not modify game behavior. The template only logs this value. | `true` | boolean (true/false) |
-
-## Usage
-
-There is no in-game usage and no keybinds. This is a developer template - it produces no visible effect in game.
-
-For the full setup guide (rename script, build steps, GitHub Actions, and optional MimicAPI), see the repository:
-
-<https://github.com/DooDesch-Mods/Mimesis-Boilerplate>
-
-## Credits / License
-
-Author: DooDesch. Licensed under the MIT License.
-
-## Images
-
-Gallery images are captured in MIMESIS; release artwork uses real game photos.
-
-Built against MIMESIS 0.4.0 / MelonLoader 0.7.3.
+Repository: <https://github.com/DooDesch-Mods/Mimesis-Boilerplate>

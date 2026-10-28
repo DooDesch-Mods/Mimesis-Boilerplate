@@ -1,0 +1,15 @@
+[
+  "setup_mod.py",
+  "setup_mod.sh",
+  "Core.cs",
+  "Config/BoilerplatePreferences.cs",
+  "Patches/ExamplePatch.cs",
+  "templates/Standalone.csproj",
+  "templates/Build.yml",
+  "tools/test_setup.py",
+  "tools/package_source.py",
+  ".gitignore",
+  "README.md",
+  "CHANGELOG.md",
+  "LICENSE.md"
+]

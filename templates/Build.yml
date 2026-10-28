@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Download official MelonLoader references
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v0.7.3 -R LavaGang/MelonLoader -p MelonLoader.x64.zip -D loader
+          python -m zipfile -e loader/MelonLoader.x64.zip loader
+      - name: Build mod
+        run: dotnet build Boilerplate.csproj -c Release -p:MelonLoaderPath="$GITHUB_WORKSPACE/loader/MelonLoader/net35"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Boilerplate
+          path: bin/Release/netstandard2.1/Boilerplate.dll
+          if-no-files-found: error
